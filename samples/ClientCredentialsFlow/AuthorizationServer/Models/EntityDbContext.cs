@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AuthorizationServer.Models
 {
-    public class EntityDbContext : DbContext
+    public class EntityDbContext : DbContext //Два контекста для БД сделанно осознанно!!!
     {
         public EntityDbContext(DbContextOptions<EntityDbContext> options)
             : base(options)

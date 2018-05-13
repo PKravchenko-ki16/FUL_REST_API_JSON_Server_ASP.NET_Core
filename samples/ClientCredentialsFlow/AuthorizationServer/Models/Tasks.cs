@@ -12,20 +12,28 @@ namespace AuthorizationServer.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
+        [Column("Id")]
         public int? Id { get; set; }
         [MaxLength(200)]
         [Required]
+        [Column("Title")]
         public string Title { get; set; }
         [Required]
+        [Column("Priority")]
         public string Priority { get; set; }
         [Required]
+        [Column("Deadline")]
         public DateTime Deadline { get; set; }
 
-        public int? Id_Task { get; set; }
+        [Column("Id_Task")]
+        public int? TaskId { get; set; }
         [MaxLength(3)]
         [Required]
+        [Column("Complite")]
         public string Complite { get; set; }
 
-        public int projectId { get; set; }
+        [Column("projectId")]
+        [Required]
+        public int ProjectId { get; set; }
     }
 }

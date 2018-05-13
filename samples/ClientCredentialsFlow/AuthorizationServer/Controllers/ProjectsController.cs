@@ -154,7 +154,7 @@ namespace AuthorizationServer.Controllers
             var response = await _projectRepository.GetOneAsync(Id);
 
             return Ok(response);
-        } //!!!!!!!!!!!!!!!!!!!!!!!
+        }
 
         [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpPost("returnfromarchive")]
@@ -246,8 +246,8 @@ namespace AuthorizationServer.Controllers
             {
                 Title = requaet.Title,
                 Description = requaet.Description,
-                Arhive = "False",
-                Id_Profile = requaet.Id_Profile
+                Arсhive = "False",
+                ProfileId = requaet.ProfileId
             };
 
          var response = await _projectRepository.CreateProject(project);
@@ -274,9 +274,9 @@ namespace AuthorizationServer.Controllers
             Project project = new Project()
             {
                 Title = requaet.Title,
-                Arhive = "False",
+                Arсhive = "False",
                 Description = "",
-                Id_Profile = requaet.Id_Profile,
+                ProfileId = requaet.ProfileId,
             };
 
             var response = await _projectRepository.CreateProject(project);

@@ -12,21 +12,26 @@ namespace AuthorizationServer.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
+        [Column("Id")]
         public int? Id { get; set; }
 
         [MaxLength(250)]
         [Required]
+        [Column("Title")]
         public string Title { get; set; }
 
         [MaxLength(2000)]
         [Required]
+        [Column("Description")]
         public string Description { get; set; }
 
         [MaxLength(10)]
         [Required]
-        public string Arhive { get; set; }
+        [Column("Arhive")]
+        public string Arсhive { get; set; }
 
         [Required]
-        public int? Id_Profile { get; set; }
+        [Column("Id_Profile")]
+        public int? ProfileId { get; set; }
     }
 }

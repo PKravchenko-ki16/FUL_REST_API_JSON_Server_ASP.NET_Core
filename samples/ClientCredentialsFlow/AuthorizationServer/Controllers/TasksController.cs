@@ -76,8 +76,8 @@ namespace AuthorizationServer.Controllers
             {
                 Title = requast.Title,
                 Deadline = requast.Deadline,
-                projectId = requast.projectId,
-                Id_Task = 0,
+                ProjectId = requast.ProjectId,
+                TaskId = 0,
                 Priority = requast.Priority
             };
 
@@ -106,8 +106,8 @@ namespace AuthorizationServer.Controllers
             {
                 Title = requast.Title,
                 Deadline = requast.Deadline,
-                projectId = requast.projectId,
-                Id_Task = requast.Id_Task,
+                ProjectId = requast.ProjectId,
+                TaskId = requast.TaskId,
                 Priority = requast.Priority
             };
 
@@ -200,6 +200,5 @@ namespace AuthorizationServer.Controllers
 
             return Ok(200);
         }
-
     }
 }

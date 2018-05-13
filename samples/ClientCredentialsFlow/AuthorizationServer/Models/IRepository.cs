@@ -112,31 +112,13 @@ namespace AuthorizationServer.Models
             {
                 string sql = "INSERT INTO Project(Title,Description,Id_Profile,Arhive) VALUES(@Title,@Description,@Id_Profile,@Arhive)";
                 _entityDbContext.Database.ExecuteSqlCommand(sql,
-                    new SqlParameter("@Title", project.Title), new SqlParameter("@Description", project.Description), new SqlParameter("@Id_Profile", project.Id_Profile), new SqlParameter("@Arhive", project.Arhive));
+                    new SqlParameter("@Title", project.Title), new SqlParameter("@Description", project.Description), new SqlParameter("@Id_Profile", project.ProfileId), new SqlParameter("@Arhive", project.Arсhive));
 
                 var id = await _entityDbContext.Projects
                     .Where(c => c.Title == project.Title && c.Description == project.Description)
                     .FirstOrDefaultAsync();
 
                 _entityDbContext.SaveChanges();
-
-                //foreach (Project p in _entityDbContext.Projects)
-                //{
-                //    if (p.Title == project.Title && p.Description == project.Description)
-                //    {
-                //        foreach (Bound b in _entityDbContext.Bound)
-                //        {
-                //            Bound b1 = new Bound()
-                //            {
-                //                id_profile = project.Id_Profile,
-                //                id_project = p.Id
-                //            };
-                //           _entityDbContext.Bound
-                //               .Add(b1);
-                //            break;
-                //        }
-                //    }
-                //}
               
                 return id.Id;
             }
@@ -218,7 +200,7 @@ namespace AuthorizationServer.Models
             try
             {
                 var q = await _entityDbContext.Projects
-                    .Where(c => c.Arhive == "False" && c.Id_Profile == Id_Profile)
+                    .Where(c => c.Arсhive == "False" && c.ProfileId == Id_Profile)
                     .ToListAsync();
                 
                 return q;
@@ -237,11 +219,11 @@ namespace AuthorizationServer.Models
 
                 foreach (Bound b in _entityDbContext.Bound)
                 {
-                    if (b.id_profile == Id_Profile)
+                    if (b.ProfileId == Id_Profile)
                     {
                         foreach (Project p in _entityDbContext.Projects)
                         {
-                            if (p.Id == b.id_project)
+                            if (p.Id == b.ProjectId)
                             {
                                query.Add(p);
                             }
@@ -265,11 +247,11 @@ namespace AuthorizationServer.Models
 
                 foreach (Bound i in _entityDbContext.Bound)
                 {
-                    if (i.id_project == id_project)
+                    if (i.ProjectId == id_project)
                     {
                         foreach (Profile p in _entityDbContext.Profile)
                         {
-                            if (i.id_profile == p.Id)
+                            if (i.ProfileId == p.Id)
                             {
                                 query.Add(p.Name);
                             }
@@ -295,8 +277,8 @@ namespace AuthorizationServer.Models
                     {
                         Bound b1 = new Bound()
                         {
-                            id_profile = p.Id,
-                            id_project = id_project
+                            ProfileId = p.Id,
+                            ProjectId = id_project
                         };
                          _entityDbContext.Bound
                             .Add(b1);
@@ -317,7 +299,7 @@ namespace AuthorizationServer.Models
             try
             {
                 var q = await _entityDbContext.Projects
-                    .Where(c => c.Arhive == "True" && c.Id_Profile == Id_Profile)
+                    .Where(c => c.Arсhive == "True" && c.ProfileId == Id_Profile)
                     .ToListAsync();
 
                 return q;
@@ -343,7 +325,7 @@ namespace AuthorizationServer.Models
             try
             {
                 List<Tasks> query = await _entityDbContext.Tasks
-                    .Where(t => t.projectId == projectId && t.Id_Task == id_task)
+                    .Where(t => t.ProjectId == projectId && t.TaskId == id_task)
                     .ToListAsync();
                 return query;
             }
@@ -359,7 +341,7 @@ namespace AuthorizationServer.Models
             {
                 string sql = "INSERT INTO Task(Title,Priority,Deadline,projectId,Id_Task) VALUES(@Title,@Priority,@Deadline,@projectId,@Id_Task)";
                 _entityDbContext.Database.ExecuteSqlCommand(sql,
-                    new SqlParameter("@Title", task.Title), new SqlParameter("@Priority", task.Priority), new SqlParameter("@Deadline", task.Deadline), new SqlParameter("@projectId", task.projectId), new SqlParameter("@Id_task", task.Id_Task));
+                    new SqlParameter("@Title", task.Title), new SqlParameter("@Priority", task.Priority), new SqlParameter("@Deadline", task.Deadline), new SqlParameter("@projectId", task.ProjectId), new SqlParameter("@Id_task", task.TaskId));
 
                 _entityDbContext.SaveChanges();
                 return Task.CompletedTask;
@@ -376,7 +358,7 @@ namespace AuthorizationServer.Models
             {
                 string sql = "INSERT INTO Task(Title,Priority,Deadline,Id_Task,projectId) VALUES(@Title,@Priority,@Deadline,@Id_Task,@projectId)";
                 _entityDbContext.Database.ExecuteSqlCommand(sql,
-                    new SqlParameter("@Title", task.Title), new SqlParameter("@Priority", task.Priority), new SqlParameter("@Deadline", task.Deadline), new SqlParameter("@Id_Task", task.Id_Task), new SqlParameter("@projectId", task.projectId));
+                    new SqlParameter("@Title", task.Title), new SqlParameter("@Priority", task.Priority), new SqlParameter("@Deadline", task.Deadline), new SqlParameter("@Id_Task", task.TaskId), new SqlParameter("@projectId", task.ProjectId));
 
                 _entityDbContext.SaveChanges();
                 return Task.CompletedTask;
@@ -397,7 +379,7 @@ namespace AuthorizationServer.Models
                     {
                         foreach (Tasks t2 in _entityDbContext.Tasks)
                         {
-                            if (t2.Id_Task == t.Id && t2.Complite == "no")
+                            if (t2.TaskId == t.Id && t2.Complite == "no")
                             {
                                 return false;
                             }

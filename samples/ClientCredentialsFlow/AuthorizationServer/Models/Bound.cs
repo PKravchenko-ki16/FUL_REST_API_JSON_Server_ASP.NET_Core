@@ -11,10 +11,13 @@ namespace AuthorizationServer.Models
     public class Bound
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("Id")]
         public int? Id { get; set; }
 
-        public int? id_profile { get; set; }
+        [Column("id_profile")]
+        public int? ProfileId { get; set; }
 
-        public int? id_project { get; set; }
+        [Column("id_project")]
+        public int? ProjectId { get; set; }
     }
 }

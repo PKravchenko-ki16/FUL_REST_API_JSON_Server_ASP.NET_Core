@@ -18,7 +18,6 @@ namespace AuthorizationServer.Controllers
         private readonly IProfileRepository pRepository;
         public AccauntController(IServiceProvider services, IProfileRepository profileRepository)
         {
-            //    _services = services;
             pRepository = profileRepository;
         }
 
