@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "REST API server", "REST API server", "{677D0C2C-B66E-487E-B915-CFE1C63CB1CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationServer", "samples\ClientCredentialsFlow\AuthorizationServer\AuthorizationServer.csproj", "{11AC3EFC-B4C0-42E2-8DB3-B39B3817CAA3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11AC3EFC-B4C0-42E2-8DB3-B39B3817CAA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11AC3EFC-B4C0-42E2-8DB3-B39B3817CAA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11AC3EFC-B4C0-42E2-8DB3-B39B3817CAA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11AC3EFC-B4C0-42E2-8DB3-B39B3817CAA3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11AC3EFC-B4C0-42E2-8DB3-B39B3817CAA3} = {677D0C2C-B66E-487E-B915-CFE1C63CB1CC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E8D79920-F6CB-4256-A63E-5E114C83B507}
+	EndGlobalSection
+EndGlobal
