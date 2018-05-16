@@ -68,9 +68,6 @@ namespace AuthorizationServer
                 
                 options.DisableHttpsRequirement();
             });
-
-            //services.AddAuthentication()
-            //    .AddOAuthValidation();
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = OAuthValidationDefaults.AuthenticationScheme;
@@ -87,34 +84,5 @@ namespace AuthorizationServer
 
             app.UseMvcWithDefaultRoute();
         }
-
-        //private async Task InitializeAsync(IServiceProvider services)
-        //{
-        //    // Создаем новую область обслуживания, чтобы обеспечить корректный вывод контекста базы данных при возврате этих методов.
-        //    using (var scope = services.GetRequiredService<IServiceScopeFactory>().CreateScope())
-        //    {
-        //        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        //        await context.Database.EnsureCreatedAsync();
-
-        //        var manager = scope.ServiceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictApplication>>();
-
-        //        if (await manager.FindByClientIdAsync("console") == null)
-        //        {
-        //            var descriptor = new OpenIddictApplicationDescriptor
-        //            {
-        //                ClientId = "console",
-        //                ClientSecret = "388D45FA-B36B-4988-BA59-B187D329C207",
-        //                DisplayName = "My client application",
-        //                Permissions =
-        //                {
-        //                    OpenIddictConstants.Permissions.Endpoints.Token,
-        //                    OpenIddictConstants.Permissions.GrantTypes.ClientCredentials
-        //                }
-        //            };
-
-        //            await manager.CreateAsync(descriptor);
-        //        }
-        //    }
-        //}
     }
 }
