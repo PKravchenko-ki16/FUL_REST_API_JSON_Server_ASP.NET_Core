@@ -40,16 +40,16 @@ namespace AuthorizationServer.Models
 
     public class ProfileRepository : IProfileRepository
     {
-        private EntityDbContext _entityDbContext;
+        private ApplicationDbContext _applicationDbContext;
 
-        public ProfileRepository(EntityDbContext entityDbContext)
+        public ProfileRepository(ApplicationDbContext applicationDbContext)
         {
-            this._entityDbContext = entityDbContext;
+            this._applicationDbContext = applicationDbContext;
         }
 
         public async Task<int> GetProfileIdAsync(string login, string password)
         {
-            var q = await _entityDbContext.Profile
+            var q = await _applicationDbContext.Profile
                 .Where(c => c.Login == login && c.Password == password)
                 .FirstOrDefaultAsync();
             return q.Id;
@@ -57,7 +57,7 @@ namespace AuthorizationServer.Models
 
         public async Task<bool> GetProfileAsync(string login, string password)
         {
-            var q = await _entityDbContext.Profile
+            var q = await _applicationDbContext.Profile
             .Where(c => c.Login == login && c.Password == password)
             .FirstOrDefaultAsync();
 
@@ -73,9 +73,9 @@ namespace AuthorizationServer.Models
         {
             try
             {
-                _entityDbContext.Profile.Add(profile);
+                _applicationDbContext.Profile.Add(profile);
                 
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
 
                 return Task.CompletedTask;
             }
@@ -89,21 +89,21 @@ namespace AuthorizationServer.Models
         public Task EditeProfile(Profile profile)
         {
             string sql = "update Profile set Name = @Name where Id = @Id";
-            _entityDbContext.Database.ExecuteSqlCommand(sql,
+            _applicationDbContext.Database.ExecuteSqlCommand(sql,
                 new SqlParameter("@Name", profile.Name), new SqlParameter("@Id", profile.Id));
 
-            _entityDbContext.SaveChanges();
+            _applicationDbContext.SaveChanges();
             return Task.CompletedTask;
         } //Принемает экземпляр профиля и заменяет у существующего, ищет его по id.
     }
 
     public class ProjectRepository : IProjectRepository
     {
-        private EntityDbContext _entityDbContext;
+        private ApplicationDbContext _applicationDbContext;
 
-        public ProjectRepository(EntityDbContext entityDbContext)
+        public ProjectRepository(ApplicationDbContext applicationDbContext)
         {
-            this._entityDbContext = entityDbContext;
+            this._applicationDbContext = applicationDbContext;
         }
 
         public async Task<int?> CreateProject(Project project)
@@ -111,14 +111,14 @@ namespace AuthorizationServer.Models
             try
             {
                 string sql = "INSERT INTO Project(Title,Description,Id_Profile,Arhive) VALUES(@Title,@Description,@Id_Profile,@Arhive)";
-                _entityDbContext.Database.ExecuteSqlCommand(sql,
+                _applicationDbContext.Database.ExecuteSqlCommand(sql,
                     new SqlParameter("@Title", project.Title), new SqlParameter("@Description", project.Description), new SqlParameter("@Id_Profile", project.ProfileId), new SqlParameter("@Arhive", project.Arсhive));
 
-                var id = await _entityDbContext.Projects
+                var id = await _applicationDbContext.Projects
                     .Where(c => c.Title == project.Title && c.Description == project.Description)
                     .FirstOrDefaultAsync();
 
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
               
                 return id.Id;
             }
@@ -133,10 +133,10 @@ namespace AuthorizationServer.Models
             try
             {
                 string sql = "update Project set Arhive = 'True' where Id = @Id";
-                _entityDbContext.Database.ExecuteSqlCommand(sql,
+                _applicationDbContext.Database.ExecuteSqlCommand(sql,
                      new SqlParameter("@Id", Id));
 
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
                 return Task.CompletedTask;
             }
             catch (Exception e)
@@ -150,10 +150,10 @@ namespace AuthorizationServer.Models
             try
             {
                 string sql = "update Project set Title = @Title, Description = @Description where Id = @Id";
-                _entityDbContext.Database.ExecuteSqlCommand(sql,
+                _applicationDbContext.Database.ExecuteSqlCommand(sql,
                     new SqlParameter("@Title", project.Title), new SqlParameter("@Description", project.Description), new SqlParameter("@Id", project.Id));
 
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
                 return Task.CompletedTask;
             }
             catch (Exception e)
@@ -167,10 +167,10 @@ namespace AuthorizationServer.Models
             try
             {
                 string sql = "update Project set Arhive = 'False' where Id = @Id";
-                _entityDbContext.Database.ExecuteSqlCommand(sql,
+                _applicationDbContext.Database.ExecuteSqlCommand(sql,
                     new SqlParameter("@Id", Id));
 
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
                 return Task.CompletedTask;
             }
             catch (Exception e)
@@ -183,7 +183,7 @@ namespace AuthorizationServer.Models
         {
             try
             {
-                Project customer = await _entityDbContext.Projects
+                Project customer = await _applicationDbContext.Projects
                     .Where(c => c.Id == Id)
                     .FirstOrDefaultAsync();
                 
@@ -199,7 +199,7 @@ namespace AuthorizationServer.Models
         {
             try
             {
-                var q = await _entityDbContext.Projects
+                var q = await _applicationDbContext.Projects
                     .Where(c => c.Arсhive == "False" && c.ProfileId == Id_Profile)
                     .ToListAsync();
                 
@@ -217,11 +217,11 @@ namespace AuthorizationServer.Models
             {
                 List<Project> query = new List<Project>();
 
-                foreach (Bound b in _entityDbContext.Bound)
+                foreach (Bound b in _applicationDbContext.Bound)
                 {
                     if (b.ProfileId == Id_Profile)
                     {
-                        foreach (Project p in _entityDbContext.Projects)
+                        foreach (Project p in _applicationDbContext.Projects)
                         {
                             if (p.Id == b.ProjectId)
                             {
@@ -245,11 +245,11 @@ namespace AuthorizationServer.Models
             {
                 List<string> query = new List<string>();
 
-                foreach (Bound i in _entityDbContext.Bound)
+                foreach (Bound i in _applicationDbContext.Bound)
                 {
                     if (i.ProjectId == id_project)
                     {
-                        foreach (Profile p in _entityDbContext.Profile)
+                        foreach (Profile p in _applicationDbContext.Profile)
                         {
                             if (i.ProfileId == p.Id)
                             {
@@ -271,7 +271,7 @@ namespace AuthorizationServer.Models
         {
             try
             {
-                foreach (Profile p in _entityDbContext.Profile)
+                foreach (Profile p in _applicationDbContext.Profile)
                 {
                     if (p.Name == name)
                     {
@@ -280,11 +280,11 @@ namespace AuthorizationServer.Models
                             ProfileId = p.Id,
                             ProjectId = id_project
                         };
-                         _entityDbContext.Bound
+                         _applicationDbContext.Bound
                             .Add(b1);
                     }
                 }
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
 
                 return Task.CompletedTask;
             }
@@ -298,7 +298,7 @@ namespace AuthorizationServer.Models
         {
             try
             {
-                var q = await _entityDbContext.Projects
+                var q = await _applicationDbContext.Projects
                     .Where(c => c.Arсhive == "True" && c.ProfileId == Id_Profile)
                     .ToListAsync();
 
@@ -313,18 +313,18 @@ namespace AuthorizationServer.Models
 
     public class TaskRepository : ITaskRepository
     {
-        private EntityDbContext _entityDbContext;
+        private ApplicationDbContext _applicationDbContext;
 
-        public TaskRepository(EntityDbContext entityDbContext)
+        public TaskRepository(ApplicationDbContext applicationDbContext)
         {
-            this._entityDbContext = entityDbContext;
+            this._applicationDbContext = applicationDbContext;
         }
 
         public async Task<List<Tasks>> GetTasksAsync(int projectId, int id_task)
         {
             try
             {
-                List<Tasks> query = await _entityDbContext.Tasks
+                List<Tasks> query = await _applicationDbContext.Tasks
                     .Where(t => t.ProjectId == projectId && t.TaskId == id_task)
                     .ToListAsync();
                 return query;
@@ -339,11 +339,11 @@ namespace AuthorizationServer.Models
         {
             try
             {
-                string sql = "INSERT INTO Task(Title,Priority,Deadline,projectId,Id_Task) VALUES(@Title,@Priority,@Deadline,@projectId,@Id_Task)";
-                _entityDbContext.Database.ExecuteSqlCommand(sql,
-                    new SqlParameter("@Title", task.Title), new SqlParameter("@Priority", task.Priority), new SqlParameter("@Deadline", task.Deadline), new SqlParameter("@projectId", task.ProjectId), new SqlParameter("@Id_task", task.TaskId));
+                string sql = "INSERT INTO Task(Title,Priority,Deadline,projectId,Id_Task,Complite) VALUES(@Title,@Priority,@Deadline,@projectId,@Id_Task,@Complite)";
+                _applicationDbContext.Database.ExecuteSqlCommand(sql,
+                    new SqlParameter("@Title", task.Title), new SqlParameter("@Priority", task.Priority), new SqlParameter("@Deadline", task.Deadline), new SqlParameter("@projectId", task.ProjectId), new SqlParameter("@Id_task", task.TaskId), new SqlParameter("@Complite", task.Complite));
 
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
                 return Task.CompletedTask;
             }
             catch (Exception e)
@@ -357,10 +357,10 @@ namespace AuthorizationServer.Models
             try
             {
                 string sql = "INSERT INTO Task(Title,Priority,Deadline,Id_Task,projectId) VALUES(@Title,@Priority,@Deadline,@Id_Task,@projectId)";
-                _entityDbContext.Database.ExecuteSqlCommand(sql,
+                _applicationDbContext.Database.ExecuteSqlCommand(sql,
                     new SqlParameter("@Title", task.Title), new SqlParameter("@Priority", task.Priority), new SqlParameter("@Deadline", task.Deadline), new SqlParameter("@Id_Task", task.TaskId), new SqlParameter("@projectId", task.ProjectId));
 
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
                 return Task.CompletedTask;
             }
             catch (Exception e)
@@ -373,11 +373,11 @@ namespace AuthorizationServer.Models
         {
             try
             {
-                foreach (Tasks t in _entityDbContext.Tasks)
+                foreach (Tasks t in _applicationDbContext.Tasks)
                 {
                     if (t.Id == id)
                     {
-                        foreach (Tasks t2 in _entityDbContext.Tasks)
+                        foreach (Tasks t2 in _applicationDbContext.Tasks)
                         {
                             if (t2.TaskId == t.Id && t2.Complite == "no")
                             {
@@ -386,11 +386,11 @@ namespace AuthorizationServer.Models
                         }
                     }
                 }
-                var q = await _entityDbContext.Tasks
+                var q = await _applicationDbContext.Tasks
                     .Where(c => c.Id == id && c.Complite == "no")
                     .FirstOrDefaultAsync();
                 q.Complite = "yes";
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
                 return true;
             }
             catch (Exception e)
@@ -404,10 +404,10 @@ namespace AuthorizationServer.Models
             try
             {
                 string sql = "update Task set Title = @Title, Priority = @Priority, Deadline = @Deadline where Id = @Id";
-                _entityDbContext.Database.ExecuteSqlCommand(sql,
+                _applicationDbContext.Database.ExecuteSqlCommand(sql,
                     new SqlParameter("@Title", task.Title), new SqlParameter("@Priority", task.Priority), new SqlParameter("@Deadline", task.Deadline), new SqlParameter("@Id", task.Id));
 
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
                 return Task.CompletedTask;
             }
             catch (Exception e)
@@ -422,10 +422,10 @@ namespace AuthorizationServer.Models
             {
 
                 string sql = "DELETE FROM Task WHERE Id = @Id or Id_Task = @Id";
-                _entityDbContext.Database.ExecuteSqlCommand(sql,
+                _applicationDbContext.Database.ExecuteSqlCommand(sql,
                     new SqlParameter("@Id", id));
 
-                _entityDbContext.SaveChanges();
+                _applicationDbContext.SaveChanges();
                 return Task.CompletedTask;
             }
             catch (Exception e)

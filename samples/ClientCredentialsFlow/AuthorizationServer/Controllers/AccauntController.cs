@@ -15,10 +15,10 @@ namespace AuthorizationServer.Controllers
     [Route("api")]
     public class AccauntController : Controller
     {
-        private readonly IProfileRepository pRepository;
+        private readonly IProfileRepository _Repository;
         public AccauntController(IServiceProvider services, IProfileRepository profileRepository)
         {
-            pRepository = profileRepository;
+            _Repository = profileRepository;
         }
 
         [AllowAnonymous]
@@ -32,7 +32,7 @@ namespace AuthorizationServer.Controllers
                 Password = request.Password
             };
 
-            await pRepository.CreateProfile(user);
+            await _Repository.CreateProfile(user);
 
             return Ok(200);
 
@@ -43,7 +43,7 @@ namespace AuthorizationServer.Controllers
         public async Task<IActionResult> GetProfileId(Profile request)
         {
 
-            var response = await pRepository.GetProfileIdAsync(request.Login, request.Password);
+            var response = await _Repository.GetProfileIdAsync(request.Login, request.Password);
 
             return Ok(response);
 
@@ -51,7 +51,7 @@ namespace AuthorizationServer.Controllers
 
         [AllowAnonymous]
         [HttpGet("logintodoist")]
-        public async Task<IActionResult> Logintodoist()
+        public IActionResult Logintodoist()
         {
             var response = Getlogintodoist();
             if (response != null)
@@ -64,7 +64,7 @@ namespace AuthorizationServer.Controllers
 
         [AllowAnonymous]
         [HttpPost("gettokentodoist")]
-        public async Task<IActionResult> GetTokenTodoist(string code)
+        public IActionResult GetTokenTodoist(string code)
         {
             var response = Gettokentodoist(code);
 
@@ -72,9 +72,7 @@ namespace AuthorizationServer.Controllers
             {
                 StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
                 return Ok(reader.ReadToEnd().ToString());
-                response.Close();
             }
-            response.Close();
         }
 
         public HttpWebResponse Getlogintodoist()

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AspNet.Security.OAuth.Validation;
 using AspNet.Security.OpenIdConnect.Primitives;
 using AuthorizationServer.Models;
@@ -10,7 +7,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Core;
-using OpenIddict.Models;
+using OpenIddict.EntityFrameworkCore.Models;
 
 namespace AuthorizationServer.Controllers
 {
@@ -78,7 +75,8 @@ namespace AuthorizationServer.Controllers
                 Deadline = requast.Deadline,
                 ProjectId = requast.ProjectId,
                 TaskId = 0,
-                Priority = requast.Priority
+                Priority = requast.Priority,
+                Complite = "no"
             };
 
             await _taskRepository.CreateToProject(task);

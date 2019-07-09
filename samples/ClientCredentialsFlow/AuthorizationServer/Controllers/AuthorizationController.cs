@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
-using AspNet.Security.OAuth.Validation;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
@@ -13,11 +8,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using OpenIddict.Core;
-using OpenIddict.Models;
+using OpenIddict.EntityFrameworkCore.Models;
 
 namespace AuthorizationServer.Controllers
 {
@@ -26,12 +18,12 @@ namespace AuthorizationServer.Controllers
     { 
         private readonly OpenIddictApplicationManager<OpenIddictApplication> _applicationManager;
 
-        private readonly IProfileRepository pRepository;
+        private readonly IProfileRepository _repository;
 
         public AuthorizationController(OpenIddictApplicationManager<OpenIddictApplication> applicationManager, IProfileRepository profileRepository)
         {
             _applicationManager = applicationManager;
-            pRepository = profileRepository;
+            _repository = profileRepository;
         }
 
         [AllowAnonymous]
@@ -50,7 +42,7 @@ namespace AuthorizationServer.Controllers
                     });
                 }
 
-                if (! await pRepository.GetProfileAsync(profile.Login, profile.Password))
+                if (! await _repository.GetProfileAsync(profile.Login, profile.Password))
                 {
                     return BadRequest(new OpenIdConnectResponse
                     {
@@ -58,9 +50,9 @@ namespace AuthorizationServer.Controllers
                         ErrorDescription = "Login or PAssword не совпадают."
                     });
                 }
-                var idprofile = await pRepository.GetProfileIdAsync(profile.Login, profile.Password);
-                var b = idprofile.ToString();
-                request.Username = b.ToString();
+                var idprofile = await _repository.GetProfileIdAsync(profile.Login, profile.Password);
+                var i = idprofile.ToString();
+                request.Username = i.ToString();
                 var ticket = CreateTicket(request, application);
 
                 return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
