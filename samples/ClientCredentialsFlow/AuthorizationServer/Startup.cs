@@ -39,9 +39,9 @@ namespace AuthorizationServer
                 
             });
 
-            services.AddScoped<IProfileRepository, ProfileRepository>();
-            services.AddScoped<IProjectRepository, ProjectRepository>();
-            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddTransient<IProfileRepository, ProfileRepository>();
+            services.AddTransient<IProjectRepository, ProjectRepository>();
+            services.AddTransient<ITaskRepository, TaskRepository>();
 
             services.AddOpenIddict()
              .AddCore(options =>
